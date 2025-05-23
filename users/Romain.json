@@ -1,0 +1,13 @@
+{
+  "exposure": "1000",
+  "framerate": "1",
+  "duration": "3",
+  "mode": 1,
+  "colors": {
+    "red": true,
+    "blue": true,
+    "yellow": true,
+    "green": true
+  },
+  "save_folder": "C:/Users/lpl.wifi/Desktop/Romain"
+}

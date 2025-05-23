@@ -1,0 +1,13 @@
+{
+  "exposure": "1000",
+  "framerate": "",
+  "duration": "",
+  "mode": 1,
+  "colors": {
+    "red": false,
+    "blue": false,
+    "yellow": false,
+    "green": true
+  },
+  "save_folder": "C:\\Users\\lpl.wifi\\Desktop"
+}
