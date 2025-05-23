@@ -1,46 +1,55 @@
 # Phenotype-o-mat
 
-A GUI-based tool for time-lapse and image acquisition using a FLIR/Spinnaker camera and an Arduino-controlled lighting system.
+A GUI-based tool for time-lapse and single image acquisition using a FLIR Blackfly (or compatible) camera and an Arduino-controlled LED system. Designed to support experiments with controllable lighting and repeatable imaging protocols.
 
 ## Requirements
 
 - Python 3.10+
-- Camera: FLIR Blackfly or similar (compatible with PySpin SDK)
-- Arduino with LED control firmware
-- USB3 connection to camera
-- Serial connection to Arduino
+- FLIR Blackfly camera (compatible with Spinnaker / PySpin)
+- Arduino (connected via serial, e.g. COM3 on Windows) with LED firmware
+- USB3 connection to the camera
+- PyQt5, NumPy, OpenCV, PySpin SDK
 
 ## How to Use
 
-1. **Connect your devices**
-   - Connect the **camera** via USB.
-   - Connect the **Arduino** to a serial port (e.g. COM3 on Windows).
+### 1. Connect your devices
 
-2. **Launch the GUI**
-   
-   Type the following line in the terminal: 
-   ```bash
-   python phenotypeomat_GUI.py
+- Connect the **camera** via USB.
+- Connect the **Arduino** via USB (e.g. `COM3` on Windows).
 
-4. **Set up your session**
+### 2. Launch the GUI
 
-Select or enter your name in the dropdown at the top. If it's a new name, a new config file will be created in the users/ folder.
-Configure your acquisition parameters:
-  - Exposure time (in microseconds)
-  - Interval between timelapse frames (in minutes)
-  - Total duration of timelapse (in minutes)
-  - LED colors to activate (Red = 670 nm, Blue = 460 nm, Green = 535 nm, Yellow = 590 nm)
-  - Output directory for saving images
-  - Acquisition mode: Single Image, Timelapse, or Video (Video not yet implemented)
+```bash
+python phenotypeomat_GUI.py
+```
+### 3. Set up your session
 
-5. **Use the live preview**
+At the top of the GUI, select your user name or enter a new name. A configuration file will be saved in the users/ directory.
 
-   Click `Start Preview` to see the live image from the camera.
-   Use it to adjust the focus manually.
-   The LED bed turns ON during preview and OFF when preview stops.
+Configure the acquisition parameters:
+- Exposure time (in microseconds)
+- Interval between images (in minutes, for timelapse)
+- Total duration (in minutes)
+- LED colors to activate (Red = 670 nm, Blue = 460 nm, Green = 535 nm, Yellow = 590 nm)
+- Output folder for saving images
+- Mode: Single Image or Timelapse (Video is not yet implemented)
 
-7. **Start acquisition**
+### 4. Use live preview (optional)
 
-    Click the `Start` button once everything is set.
+Click `Start Preview` to activate the camera and see a live image.
+Use this to manually adjust the focus.
+The LED bed turns ON during preview and is turned OFF when preview stops.
 
-    The software will turn OFF the colored LEDs and turn ON the LED bed only during image capture.
+### 5. Start acquisition
+
+Click `Start` to begin the capture process.
+During image capture:
+1. The LED bed turns ON
+2. All color LEDs are temporarily turned OFF
+3. Then restored between frames
+
+Captured images are saved automatically in your selected directory.
+
+## Source & Inspiration
+
+This project is adapted and extended from the open protocol developed by Arcadia Science (https://github.com/Arcadia-Science/arcadia-phenotypeomat-protocol/tree/main)
