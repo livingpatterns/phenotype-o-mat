@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import time
 import os
@@ -5,6 +7,7 @@ import json
 import numpy as np
 import serial
 import cv2
+#from picamera2 import Preview
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QPushButton, QLabel, QHBoxLayout, QVBoxLayout, QFrame, QGridLayout,
     QLineEdit, QFileDialog, QGroupBox, QButtonGroup, QRadioButton, QCheckBox, QComboBox
@@ -15,7 +18,7 @@ import flir_camera_tools.cam_tools as ct
 import utils.cam_utils as cu
 import PySpin
 
-ARDUINO_PORT = "COM3"
+ARDUINO_PORT = "/dev/ttyACM0"
 USER_CONFIG_DIR = os.path.join(os.getcwd(), "users")
 os.makedirs(USER_CONFIG_DIR, exist_ok=True)
 
@@ -162,6 +165,11 @@ class ArcardieGUI(QWidget):
         self.blue_cb = QCheckBox("Blue")
         self.yellow_cb = QCheckBox("Yellow")
         self.green_cb = QCheckBox("Green")
+        self.red_cb.stateChanged.connect(lambda state: self.send_led_command("670", state))  #### NEXT 4 JUST ADDED
+        self.blue_cb.stateChanged.connect(lambda state: self.send_led_command("460", state))
+        self.yellow_cb.stateChanged.connect(lambda state: self.send_led_command("590", state))
+        self.green_cb.stateChanged.connect(lambda state: self.send_led_command("535", state))
+
         grid.addWidget(self.red_cb, 0, 0)
         grid.addWidget(self.blue_cb, 0, 1)
         grid.addWidget(self.yellow_cb, 1, 0)
@@ -396,6 +404,20 @@ class ArcardieGUI(QWidget):
             cu.run_timelapse(self.cam, duration_min, interval_min, self.save_folder, prefix, barcode, self.dev, colors)
         elif mode == "video":
             cu.run_video(self.cam, duration_min * 60, self.save_folder, prefix, barcode, fps=30)
+
+    def send_led_command(self, color, state):
+        if not self.dev or not self.arduino_status:
+            print(f"⚠️ Cannot send LED command for {color}: Arduino not connected.")
+            return
+
+        status = 1 if state == Qt.Checked else 0
+        cmd = f"SET LED_{color}_STATUS {status};"
+        try:
+            self.dev.write(cmd.encode())
+            print(f"📤 Sent to Arduino: {cmd}")
+        except Exception as e:
+            print(f"❌ Failed to send command to Arduino: {e}")
+
 
 
 
